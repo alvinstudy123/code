@@ -1,9 +1,30 @@
 
 import matplotlib.pyplot as plt 
-from main import create_dataset
+import os
 import numpy as np
 
 
+def load_dataset(dataset, path):
+    labels = os.listdir(os.path.join(path, dataset))
+
+    x = []
+    y = []
+
+    for label in labels:
+        for file in os.listdir(os.path.join(path, dataset, label)):
+            image = cv2.imread(os.path.join(path, dataset, label, file), cv2.IMREAD_GRAYSCALE)
+
+            x.append(image)
+            y.append(label)
+
+    return np.array(x), np.array(y).astype('uint8')
+
+
+def create_dataset(path):
+    x, y = load_dataset("train", path)
+    x_test, y_test = load_dataset("test", path)
+
+    return x, y, x_test, y_test
 
 
 
